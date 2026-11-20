@@ -70,8 +70,14 @@
     </div>
 
     <div class="hero-footer">
-      <!-- Location will be linked later. -->
-      <span class="site-label">Wichita, KS</span>
+      <div class="hf-left">
+        <!-- Location will be linked later. -->
+        <span class="site-label">Wichita, KS</span>
+        <span class="hf-divider" aria-hidden="true"></span>
+        <button type="button" class="site-label legal-open" id="legalOpen" aria-haspopup="dialog" aria-controls="legalOverlay">
+          Legal
+        </button>
+      </div>
       <!-- Contact will be linked later. -->
       <span class="site-label hf-right">Contact</span>
     </div>
@@ -86,8 +92,20 @@
       <div class="about-body">
         <p>Purple Cow Investment Partners invests in founder- and family-owned companies across the Midwest, Mountain West and Texas: businesses that stand out for strong leadership and disciplined processes. We partner with owners to grow what they have built, with structures that let them share in the upside.</p>
         <p>Unlike traditional private equity, we don’t lead with cost cutting or sweeping changes; we focus on strategic growth around shared values. Growth is led by the existing team, not roll-ups. We help build management depth and professionalize pricing and procurement, and we live and invest in the communities we serve. We know how to build a business because we have built our own.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="legalOverlay" class="about-overlay" role="dialog" aria-modal="true" aria-labelledby="legalTitle" aria-hidden="true">
+    <div class="about-panel about-panel--compact" id="legalPanel" tabindex="-1">
+      <button type="button" class="about-close" id="legalClose" aria-label="Close legal">
+        <span aria-hidden="true">×</span>
+      </button>
+      <h2 id="legalTitle" class="about-title">Legal</h2>
+      <div class="about-body">
         <!-- Fund-site disclaimer — have counsel review before launch. -->
-        <p class="about-disclaimer">This website is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any securities. Any such offer or solicitation will be made only pursuant to a confidential private placement memorandum and only to qualified investors in jurisdictions where permitted by law.</p>
+        <p>This website is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any securities. Any such offer or solicitation will be made only pursuant to a confidential private placement memorandum and only to qualified investors in jurisdictions where permitted by law.</p>
       </div>
     </div>
   </div>

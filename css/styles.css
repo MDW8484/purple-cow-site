@@ -123,8 +123,10 @@ a:focus-visible {
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  line-height: 1.5;
   color: var(--white);
   margin: 0;
+  white-space: nowrap;
 }
 
 button.site-label {
@@ -132,19 +134,29 @@ button.site-label {
   background: none;
   border: 0;
   padding: 0;
+  margin: 0;
   cursor: pointer;
   pointer-events: auto;
-  /* Do not use the font shorthand — it would override .site-label size/spacing. */
-  font-family: inherit;
-  color: inherit;
+  /* Leave type to .site-label. Do not use font/color: inherit — that
+     would pull body defaults (16px / ink) instead of the label styles. */
+  color: var(--white);
+  opacity: 1;
+  text-decoration: none;
 }
 
-button.site-label:hover {
-  color: var(--lavender);
+button.site-label:hover,
+button.site-label:focus-visible {
+  color: var(--white);
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(249, 247, 244, 0.7);
 }
 
-.site-header.is-scrolled button.site-label:hover {
-  color: #6B3FA0;
+button.site-label:focus-visible {
+  outline: 1px solid rgba(249, 247, 244, 0.7);
+  outline-offset: 4px;
 }
 
 .nowrap {
@@ -308,9 +320,30 @@ button.site-label:hover {
   width: 100%;
 }
 
+.hf-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+}
+
+.hf-divider {
+  display: inline-block;
+  width: 1px;
+  height: 0.7em;
+  background: currentColor;
+  opacity: 0.45;
+  flex: 0 0 auto;
+  align-self: center;
+}
+
 .hf-right {
   text-align: right;
   margin-left: auto;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 /* ---------- Approach ---------- */
@@ -422,6 +455,11 @@ button.site-label:hover {
   padding: 2.75rem 2.5rem 2.5rem;
   box-shadow: 0 16px 60px rgba(18, 8, 24, 0.28);
   outline: none;
+}
+
+.about-panel--compact {
+  width: min(32rem, 100%);
+  padding: 2.5rem 2.25rem 2.25rem;
 }
 
 .about-close {
@@ -622,6 +660,10 @@ body.about-open {
 
 @media (max-width: 420px) {
   .hero-footer {
-    gap: 1rem;
+    gap: 0.85rem;
+  }
+
+  .hf-left {
+    gap: 0.6rem;
   }
 }

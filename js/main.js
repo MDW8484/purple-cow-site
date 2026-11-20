@@ -71,84 +71,118 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
 
-  /* About overlay */
-  var overlay = document.getElementById("aboutOverlay");
-  var openBtn = document.getElementById("aboutOpen");
-  var closeBtn = document.getElementById("aboutClose");
-  var panel = document.getElementById("aboutPanel");
+  /* About / Legal overlays — same open, close, and focus-trap behavior. */
   var lastFocus = null;
+  var activeDialog = null;
 
-  function focusables() {
-    if (!overlay) return [];
-    return Array.prototype.slice.call(
-      overlay.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      )
-    ).filter(function (el) {
-      return !el.hasAttribute("disabled") && el.getAttribute("aria-hidden") !== "true";
-    });
-  }
+  function bindDialog(ids) {
+    var overlay = document.getElementById(ids.overlay);
+    var openBtn = document.getElementById(ids.open);
+    var closeBtn = document.getElementById(ids.close);
+    var panel = document.getElementById(ids.panel);
+    if (!overlay) return null;
 
-  function isOpen() {
-    return overlay && overlay.classList.contains("is-visible");
-  }
-
-  function openAbout() {
-    if (!overlay) return;
-    lastFocus = document.activeElement;
-    overlay.style.display = "flex";
-    overlay.classList.add("is-open");
-    document.body.classList.add("about-open");
-    overlay.setAttribute("aria-hidden", "false");
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        overlay.classList.add("is-visible");
-        if (closeBtn) closeBtn.focus();
-        else if (panel) panel.focus();
+    function focusables() {
+      return Array.prototype.slice.call(
+        overlay.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter(function (el) {
+        return !el.hasAttribute("disabled") && el.getAttribute("aria-hidden") !== "true";
       });
-    });
-  }
+    }
 
-  function closeAbout() {
-    if (!overlay || !isOpen()) return;
-    overlay.classList.remove("is-visible");
-    overlay.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("about-open");
-    if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
-    var done = false;
-    function hide() {
-      if (done) return;
-      done = true;
+    function isOpen() {
+      return overlay.classList.contains("is-visible") || overlay.classList.contains("is-open");
+    }
+
+    function hideNow() {
+      overlay.classList.remove("is-visible");
       overlay.classList.remove("is-open");
       overlay.style.display = "none";
-      overlay.removeEventListener("transitionend", hide);
+      overlay.setAttribute("aria-hidden", "true");
+      if (activeDialog === api) activeDialog = null;
     }
-    overlay.addEventListener("transitionend", hide);
-    setTimeout(hide, 320);
+
+    function open() {
+      if (activeDialog && activeDialog !== api) activeDialog.close(true);
+      lastFocus = document.activeElement;
+      overlay.style.display = "flex";
+      overlay.classList.add("is-open");
+      document.body.classList.add("about-open");
+      overlay.setAttribute("aria-hidden", "false");
+      activeDialog = api;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          overlay.classList.add("is-visible");
+          if (closeBtn) closeBtn.focus();
+          else if (panel) panel.focus();
+        });
+      });
+    }
+
+    function close(immediate) {
+      if (!isOpen()) return;
+      overlay.classList.remove("is-visible");
+      overlay.setAttribute("aria-hidden", "true");
+      if (activeDialog === api) {
+        activeDialog = null;
+        document.body.classList.remove("about-open");
+        if (!immediate && lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+      }
+      if (immediate) {
+        hideNow();
+        return;
+      }
+      var done = false;
+      function hide() {
+        if (done) return;
+        done = true;
+        overlay.classList.remove("is-open");
+        overlay.style.display = "none";
+        overlay.removeEventListener("transitionend", hide);
+      }
+      overlay.addEventListener("transitionend", hide);
+      setTimeout(hide, 320);
+    }
+
+    var api = {
+      overlay: overlay,
+      panel: panel,
+      focusables: focusables,
+      open: open,
+      close: close,
+      isOpen: isOpen
+    };
+
+    if (openBtn) {
+      openBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        open();
+      });
+    }
+    if (closeBtn) closeBtn.addEventListener("click", function () { close(); });
+    overlay.addEventListener("click", function (e) {
+      if (e.target === overlay) close();
+    });
+
+    return api;
   }
 
-  if (openBtn) {
-    openBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      openAbout();
-    });
-  }
-  if (closeBtn) closeBtn.addEventListener("click", closeAbout);
-  if (overlay) {
-    overlay.addEventListener("click", function (e) {
-      if (e.target === overlay) closeAbout();
-    });
-  }
+  bindDialog({ overlay: "aboutOverlay", open: "aboutOpen", close: "aboutClose", panel: "aboutPanel" });
+  bindDialog({ overlay: "legalOverlay", open: "legalOpen", close: "legalClose", panel: "legalPanel" });
 
   document.addEventListener("keydown", function (e) {
-    if (!isOpen()) return;
+    if (!activeDialog) return;
     if (e.key === "Escape" || e.key === "Esc") {
       e.preventDefault();
-      closeAbout();
+      activeDialog.close();
       return;
     }
     if (e.key === "Tab") {
-      var items = focusables();
+      var items = activeDialog.focusables();
+      var panel = activeDialog.panel;
+      var overlay = activeDialog.overlay;
       if (!items.length) {
         e.preventDefault();
         if (panel) panel.focus();
