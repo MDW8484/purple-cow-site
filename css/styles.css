@@ -1,0 +1,627 @@
+/* Purple Cow Investment Partners — draft site
+   Palette drawn from the candidate wordmark (not used as a logo):
+   deep purple #4A1A5C, lavender #C9B3E0, cool gray subtitle. */
+
+:root {
+  --purple: #4A1A5C;
+  --purple-deep: #2C0F38;
+  --lavender: #C9B3E0;
+  --lavender-soft: rgba(201, 179, 224, 0.85);
+  --ink: #1A1220;
+  --gray: #8A8490;
+  --gray-soft: #C8C0D0;
+  --paper: #F6F3EE;
+  --paper-deep: #EDE8E1;
+  --white: #F9F7F4;
+  --header-h: 4.5rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--lavender);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+#approach,
+#privacy {
+  scroll-margin-top: var(--header-h);
+}
+
+a:focus-visible {
+  outline: 1px solid var(--lavender);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 100;
+  background: var(--purple);
+  color: var(--white);
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--header-h);
+  padding: 0 2.25rem;
+  pointer-events: none;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  pointer-events: auto;
+}
+
+.site-label {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin: 0;
+}
+
+button.site-label {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  /* Do not use the font shorthand — it would override .site-label size/spacing. */
+  font-family: inherit;
+  color: inherit;
+}
+
+button.site-label:hover {
+  color: var(--lavender);
+}
+
+.site-header.is-scrolled button.site-label:hover {
+  color: #6B3FA0;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.site-header.is-scrolled {
+  background: rgba(246, 243, 238, 0.94);
+  box-shadow: 0 1px 0 rgba(74, 26, 92, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.site-header.is-scrolled .site-label {
+  color: var(--purple);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* final.jpg is the landing image: autoplay failure and reduced motion. */
+  background: #1A1220 url("../assets/final.jpg") center center / cover no-repeat;
+}
+
+.hero-video,
+.hero-final {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.hero-video {
+  z-index: 1;
+}
+
+.hero-final {
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.85s ease;
+}
+
+.hero-media.is-ended .hero-final,
+.hero-media.is-static .hero-final {
+  opacity: 1;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(18, 8, 24, 0.50) 0%,
+      rgba(18, 8, 24, 0.20) 22%,
+      rgba(18, 8, 24, 0.06) 48%,
+      rgba(18, 8, 24, 0.18) 72%,
+      rgba(12, 6, 16, 0.58) 100%
+    );
+  pointer-events: none;
+}
+
+.hero-center {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: calc(var(--header-h) + 3.5vh) 1.5rem 0;
+  text-align: center;
+}
+
+.wordmark {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35);
+}
+
+.wordmark::before {
+  content: "";
+  position: absolute;
+  inset: -3.5rem -8rem;
+  background: radial-gradient(ellipse at center, rgba(12, 6, 16, 0.32) 0%, rgba(12, 6, 16, 0) 68%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.wordmark-mark {
+  width: auto;
+  height: 4.5rem; /* 72px — candidate cow head, slightly larger than the old mark */
+  opacity: 1;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.45));
+}
+
+.wordmark h1 {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.wm-name {
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(2.75rem, 7.2vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white);
+  padding-left: 0.14em; /* optically center letter-spacing */
+}
+
+.wm-rule {
+  display: block;
+  width: 2.75rem;
+  height: 1px;
+  background: var(--lavender);
+  opacity: 0.9;
+}
+
+.wm-sub {
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.62rem, 1.05vw, 0.78rem);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(249, 247, 244, 0.92);
+  padding-left: 0.42em;
+}
+
+.hero-footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  padding: 0 2.25rem 2rem;
+  width: 100%;
+}
+
+.hf-right {
+  text-align: right;
+  margin-left: auto;
+}
+
+/* ---------- Approach ---------- */
+
+.approach {
+  background: var(--paper);
+  color: var(--purple);
+  min-height: calc(100vh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6.5rem 1.75rem;
+  text-align: center;
+}
+
+.section-label {
+  margin: 0 0 1.5rem;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.thesis {
+  margin: 0 auto;
+  max-width: 22em;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-weight: 500;
+  font-size: clamp(1.45rem, 2.4vw, 1.95rem);
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  color: var(--purple);
+}
+
+/* ---------- Site footer ---------- */
+
+.site-footer {
+  background: var(--paper-deep);
+  color: var(--gray);
+  padding: 2.25rem 2.25rem 2.75rem;
+}
+
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.footer-row a {
+  color: var(--purple);
+}
+
+.footer-row a:hover {
+  color: #6B3FA0;
+}
+
+.copyright {
+  margin: 0;
+}
+
+.disclaimer {
+  margin: 1.75rem auto 0;
+  max-width: 42rem;
+  text-align: center;
+  font-size: 0.6875rem;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  color: #7A737C;
+}
+
+
+/* ---------- About overlay ---------- */
+
+.about-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(18, 8, 24, 0.58);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.about-overlay.is-open {
+  display: flex;
+  opacity: 0;
+}
+
+.about-overlay.is-visible {
+  opacity: 1;
+}
+
+.about-panel {
+  position: relative;
+  width: min(36rem, 100%);
+  max-height: min(85vh, 40rem);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 2.75rem 2.5rem 2.5rem;
+  box-shadow: 0 16px 60px rgba(18, 8, 24, 0.28);
+  outline: none;
+}
+
+.about-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--purple);
+  font-size: 1.65rem;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.about-close:hover {
+  color: var(--ink);
+}
+
+.about-close:focus-visible {
+  outline: 1px solid var(--purple);
+  outline-offset: 3px;
+}
+
+.about-title {
+  margin: 0 0 1.35rem;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-weight: 600;
+  font-size: 2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--purple);
+  line-height: 1;
+}
+
+.about-body p {
+  margin: 0 0 1.1rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #2A2030;
+}
+
+.about-body p:last-of-type {
+  margin-bottom: 1.6rem;
+}
+
+.about-meta {
+  margin: 0;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(74, 26, 92, 0.14);
+}
+
+.about-meta div {
+  margin: 1rem 0 0;
+}
+
+.about-meta dt {
+  margin: 0 0 0.25rem;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.about-meta dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: #2A2030;
+}
+
+.about-disclaimer {
+  margin: 1.5rem 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(74, 26, 92, 0.14);
+  font-size: 0.6875rem;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  color: var(--gray);
+}
+
+body.about-open {
+  overflow: hidden;
+}
+
+@media (max-width: 720px) {
+  .about-overlay {
+    padding: 0.75rem 0.75rem 0;
+    align-items: flex-end;
+  }
+
+  .about-panel {
+    width: 100%;
+    max-height: 88vh;
+    padding: 2rem 1.35rem 2.25rem;
+  }
+
+  .about-title {
+    font-size: 1.65rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .about-body p {
+    margin-bottom: 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .about-body p:last-of-type {
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-overlay {
+    transition: none;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-video {
+    display: none;
+  }
+
+  .hero-final {
+    opacity: 1;
+    transition: none;
+  }
+
+  .hero-media {
+    background-image: url("../assets/final.jpg");
+    background-size: cover;
+    background-position: center center;
+  }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 720px) {
+  .site-header,
+  .hero-footer,
+  .site-footer {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .site-label {
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+  }
+
+  .hero-center {
+    padding-top: calc(var(--header-h) + 2.5vh);
+  }
+
+  .wordmark-mark {
+    width: auto;
+    height: 2.25rem; /* 36px */
+  }
+
+  .wm-name {
+    letter-spacing: 0.10em;
+    padding-left: 0.10em;
+  }
+
+  .wm-sub {
+    letter-spacing: 0.28em;
+    padding-left: 0.28em;
+  }
+
+  .hero-footer {
+    padding-bottom: 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .approach {
+    padding: 5.5rem 1.5rem;
+  }
+
+  .footer-row {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-footer {
+    gap: 1rem;
+  }
+}
